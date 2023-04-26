@@ -52,7 +52,7 @@ def home():
 
 # 1. Ruta para obtener todos los libros de la BBDD
 
-@app.route("/books", methods = ["GET "])
+@app.route("/books", methods = ["GET"])
 def get_books():
      conn = get_db() # Creamos la conexión. Me conecto a la BBDD. Esta función la hemos definido arriba.
     cursor = conn.cursor () # Creamos un cursor, para apuntar al principio de la BBDD, Y luego se irá moviendo. Es una especie de "puntero".
