@@ -54,12 +54,10 @@ def home():
 
 @app.route("/books", methods = ["GET"])
 def get_books():
-     conn = get_db() # Creamos la conexión. Me conecto a la BBDD. Esta función la hemos definido arriba.
-    cursor = conn.cursor () # Creamos un cursor, para apuntar al principio de la BBDD, Y luego se irá moviendo. Es una especie de "puntero".
-    cursor.execute ("SELECT * FROM books_table") # Esto nos va a devolver todo lo que hay en esta tabla (por el *)
-    # "Execute" es una sentencia de la clase "cursor" que ejecuta una query SQL en la base de datos.
-    books = cursor.fetchall() # Con esto obtenemos las columnas. Esto es un diccionario.
-
+    conn = get_db()
+    cursor = conn.cursor ()
+    cursor.execute ("SELECT * FROM books_table") 
+    books = cursor.fetchall() 
     cursor.close()
 
     return jasonify(books)
