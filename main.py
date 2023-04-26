@@ -1,7 +1,9 @@
-from flask import Flask, g
+from flask import Flask, g, jasonify
 import psycopg2
 
 app = Flask (__name__)
+
+# Configuración de la conexión a la base de datos
 
 def get_db():
     db = getattr (g, "_database", None)
@@ -26,6 +28,8 @@ def close_connection (exception):
     if db is not None:
         db.close()
 
+# Ruta para la página de inicio
+
 @app.route("/", methods=["GET"])
 # Al poner la barra se entiende que se trata de la "base"
 def home():
@@ -46,3 +50,21 @@ def home():
     return home_display
 
 
+# 1. Ruta para obtener todos los libros de la BBDD
+
+@app.route("/books", methods = ["GET "])
+def get_books():
+     conn = get_db() # Creamos la conexión. Me conecto a la BBDD. Esta función la hemos definido arriba.
+    cursor = conn.cursor () # Creamos un cursor, para apuntar al principio de la BBDD, Y luego se irá moviendo. Es una especie de "puntero".
+    cursor.execute ("SELECT * FROM books_table") # Esto nos va a devolver todo lo que hay en esta tabla (por el *)
+    # "Execute" es una sentencia de la clase "cursor" que ejecuta una query SQL en la base de datos.
+    books = cursor.fetchall() # Con esto obtenemos las columnas. Esto es un diccionario.
+
+    cursor.close()
+
+    return jasonify(books)
+
+
+# Ejecutar la aplicación
+if __name__ == '__main__':
+    app.run(debug = True)
